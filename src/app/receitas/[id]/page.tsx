@@ -4,6 +4,7 @@ import Image from "next/image"
 import { recipes } from "@/lib/data";
 import { notFound } from "next/navigation";
 import InfoPill from "@/components/InfoPill";
+import PreparationStep from "@/components/PreparationStep";
 interface RecipesPageProps {
   params: Promise<{
     id: string;
@@ -21,7 +22,7 @@ export default async function ReceitasPage({ params }: RecipesPageProps) {
     return  (
         <main className="grow py-8">
             <div className="container mx-auto">
-                <Link className = "flex text-orange-500 hover:text-orange-700 mb-6" href="receitas">
+                <Link className = "flex text-orange-500 hover:text-orange-700 mb-6" href="/receitas">
                     <ChevronLeft />
                     Voltar para receitas
                 </Link>
@@ -61,7 +62,7 @@ export default async function ReceitasPage({ params }: RecipesPageProps) {
                                 <h2 className="text-xl font-bold mb-4">Ingredientes</h2>
                                 <ul className="list-disc list-inside space-y-2">
                                     {recipe.ingredients.map((ingredient)=>(
-                                        <li className="marker:text-orange-500">{ingredient}</li>
+                                        <li key={ingredient} className="marker:text-orange-500">{ingredient}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -69,7 +70,11 @@ export default async function ReceitasPage({ params }: RecipesPageProps) {
                             {/*Coluna do modo de preparo*/}
                             <div>
                                 <h2 className="text-xl font-bold mb-4">Modo de Preparo</h2>
-                                {/*TO DO: componente de modo de preparo*/}
+                                <ol className="space-y-4">
+                                    {recipe.instructions.map((instruction, index) => (
+                                        <PreparationStep key={instruction} index={index+1} description={instruction}/>
+                                    ))}
+                                </ol>
                             </div>
                         </div>
                     </div>
