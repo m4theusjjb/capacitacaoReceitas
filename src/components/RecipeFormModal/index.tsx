@@ -26,7 +26,7 @@ export default function RecipeFormModal({ isOpen, onClose}: RecipeFormModalProps
         onClose()
     }
 
-    const inputStyle = "p-2 border border-zinc-200 rounded-md"
+    const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow"
 
     return(
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -37,6 +37,7 @@ export default function RecipeFormModal({ isOpen, onClose}: RecipeFormModalProps
 
                 <form onSubmit={ handleSubmit(onSubmit) } className="flex flex-col gap-4 w-full">
                     <div className="grid grid-cols-2 gap-2">
+
                         {/* Título */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="title">Título</label>
@@ -67,25 +68,54 @@ export default function RecipeFormModal({ isOpen, onClose}: RecipeFormModalProps
                     </div>
 
                     <div className="grid grid-cols-3 gap-2">
-                          {/* Tempo de preparo */}
+
+                        {/* Tempo de preparo */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="prepTime">Preparo</label>
                             <input className={inputStyle} type="text" id="prepTime" placeholder="45 minutos"{...register("prepTime")}/>
                             {errors.prepTime && <span className="text-sm text-red-500">{errors.prepTime.message}</span>}
                         </div>
 
-                          {/* Tempo de cozimento */}
+                        {/* Tempo de cozimento */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="cookTime">Cozimento</label>
                             <input className={inputStyle} type="text" id="cookTime" placeholder="30 minutos" {...register("cookTime")}/>
                             {errors.cookTime && <span className="text-sm text-red-500">{errors.cookTime.message}</span>}
                         </div>
 
-                          {/* Porções */}
+                        {/* Porções */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="servings">Porções</label>
                             <input className={inputStyle} type="text" id="servings" defaultValue={1} {...register("servings")}/>
                             {errors.servings && <span className="text-sm text-red-500">{errors.servings.message}</span>}
+                        </div>
+                    </div>
+
+                    {/* Lista de ingredientes */}
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="ingredients">Ingredientes</label>
+                        <div className="flex flex-col gap-1">
+                            {/* conteúdo */}
+                            <div className="flex gap-2 w-full">
+                                <input type="text" className={inputStyle}/>
+                                <button type="button" className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium">Remover</button>
+                            </div>
+
+                            <button type="button" className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium w-fit">Adicionar Ingrediente</button>
+                        </div>
+                    </div>
+
+                    {/* Instruções */}
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="instructions">Instruções</label>
+                        <div className="flex flex-col gap-1">
+                            {/* conteúdo */}
+                            <div className="flex gap-2 w-full">
+                                <textarea id="instructions" className={inputStyle}/>
+                                <button type="button"className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium h-fit">Remover</button>
+                            </div>
+
+                            <button type="button" className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium w-fit">Adicionar Instrução</button>
                         </div>
                     </div>
 
