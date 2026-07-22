@@ -28,7 +28,7 @@ export default function ReceitasPage(){
     };
 
     const handleCloseModal = () => {
-       () => setIsRecipeModalOpen(false);
+        setIsRecipeModalOpen(false);
     };
 
     const handleSaveRecipe = (recipeData: Omit <Recipe,"id"> | Recipe) => {
@@ -42,19 +42,19 @@ export default function ReceitasPage(){
             const updateRecipe = recipeData as Recipe
             setRecipes((prev) => prev.map((recipe) => (recipe.id === updateRecipe.id ? updateRecipe : recipe)))
         }
-        handleCloseModal();
+        handleCloseModal()
     };
 
     const handleOpenDeleteConfirmationModal = (recipe: Recipe) => {
         setSelectedRecipe(recipe);
-        setIsDeletedConfirmationModalOpen(true);
+        setIsDeletedConfirmationModalOpen(true)
     }
 
     const handleDeleteRecipe = () => {
         if(selectedRecipe){
             setRecipes((prev) => prev.filter((recipe) => recipe.id !== selectedRecipe.id))
 
-            setIsRecipeModalOpen(false)
+            setIsDeletedConfirmationModalOpen(false)
             setSelectedRecipe(undefined)
         }
     }
