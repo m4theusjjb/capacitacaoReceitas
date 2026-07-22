@@ -3,11 +3,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RecipeFormData, recipeSchema } from "@/lib/formValidationSchemas/recipeSchema";
 import { Recipe } from "@/lib/data";
+import { useEffect } from "react";
 
 interface RecipeFormModalProps {
     isOpen: boolean,
     onClose: () => void;
-    onSave: (recipe: Omit<Recipe,"id">) => void;
+    onSave: (recipe: Omit<Recipe,"id"> | Recipe) => void;
+    mode: "create" | "edit",
+    recipe?: Recipe
 }
 
 const DEFAULT_VALUES: RecipeFormData = {
@@ -22,7 +25,7 @@ const DEFAULT_VALUES: RecipeFormData = {
     instructions: [{ value: ""}],
 }
 
-export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormModalProps) {
+export default function RecipeFormModal({ isOpen, onClose, onSave, mode, recipe}: RecipeFormModalProps) {
 
     const {
         register,
@@ -43,7 +46,7 @@ export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormM
     } = useFieldArray({
         control,
         name: "ingredients"
-    })
+    });
 
     const {
         fields: instructionFields,
@@ -52,7 +55,23 @@ export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormM
     } = useFieldArray({
         control,
         name: "instructions"
-    })
+    });
+
+    useEffect(() => {
+        if(isOpen){
+            if(mode === "edit" && recipe) {
+                reset({
+                    ...recipe,
+                    ingredients: recipe.ingredients.map((ing) => ({value: ing})),
+                    instructions: recipe.instructions.map((inst) => ({value: inst})),
+
+                });
+            } else {
+                reset(DEFAULT_VALUES);
+            }
+        }
+
+    }, [mode, isOpen, recipe, reset])
 
     const onSubmit = (data: RecipeFormData) => {
 
@@ -63,7 +82,7 @@ export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormM
         }
 
         console.log(recipeData);
-        onSave(recipeData);
+        onSave(mode === "edit" && recipe ? {...recipeData, id: recipe.id} : recipeData);
         reset();
         onClose();
     }
@@ -72,9 +91,9 @@ export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormM
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-white min-w-2xl max-h-[90dvh] overflow-y">
+            <DialogContent className="bg-white min-w-2xl max-h-[90dvh] overflow-y-scroll">
                 <DialogHeader>
-                    <DialogTitle>Criar Nova Receita</DialogTitle>
+                    <DialogTitle>{mode === "create" ? "Nova Receita" : "Editar Receita"}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
@@ -175,7 +194,7 @@ export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormM
 
                     <div className="flex gap-2 self-end">
                         <button type="button" onClick={onClose} className="bg-white border border-zinc-300 rounded-md hover:bg-gray-100 transition-colors px-4 py-2 font-medium">Cancelar</button>
-                        <button type="submit" className="bg-black border text-white hover:bg-gray-800 transition-colors px-4 py-2 font-medium">Criar Receita</button>
+                        <button type="submit" className="bg-black border text-white hover:bg-gray-800 transition-colors px-4 py-2 font-medium">{mode === "create" ? "Criar Receita" : "Salvar Alterações"}</button>
                     </div>
                 </form>
             </DialogContent>
