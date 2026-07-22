@@ -64,7 +64,6 @@ export default function RecipeFormModal({ isOpen, onClose, onSave, mode, recipe}
                     ...recipe,
                     ingredients: recipe.ingredients.map((ing) => ({value: ing})),
                     instructions: recipe.instructions.map((inst) => ({value: inst})),
-
                 });
             } else {
                 reset(DEFAULT_VALUES);

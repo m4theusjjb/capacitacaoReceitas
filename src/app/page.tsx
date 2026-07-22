@@ -21,7 +21,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TO DO: seção receitas em destaque*/}
+      {/* seção receitas em destaque*/}
       <section className="py-12">
         <div className="flex flex-col items-center container mx-auto gap-8">
           <h2 className="text-lg font-bold">Receitas em destaque</h2>
