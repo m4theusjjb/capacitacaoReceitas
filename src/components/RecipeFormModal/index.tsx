@@ -2,17 +2,19 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RecipeFormData, recipeSchema } from "@/lib/formValidationSchemas/recipeSchema";
+import { Recipe } from "@/lib/data";
 
 interface RecipeFormModalProps {
     isOpen: boolean,
     onClose: () => void;
+    onSave: (recipe: Omit<Recipe,"id">) => void;
 }
 
 const DEFAULT_VALUES: RecipeFormData = {
     title: "",
     category: "",
     description: "",
-    imageURL: "",
+    image: "",
     prepTime: "",
     cookTime: "",
     servings: 1,
@@ -20,7 +22,7 @@ const DEFAULT_VALUES: RecipeFormData = {
     instructions: [{ value: ""}],
 }
 
-export default function RecipeFormModal({ isOpen, onClose }: RecipeFormModalProps) {
+export default function RecipeFormModal({ isOpen, onClose, onSave }: RecipeFormModalProps) {
 
     const {
         register,
@@ -60,9 +62,10 @@ export default function RecipeFormModal({ isOpen, onClose }: RecipeFormModalProp
             instructions: data.instructions.map((instruction => instruction.value)),
         }
 
-        console.log(recipeData)
-        reset()
-        onClose()
+        console.log(recipeData);
+        onSave(recipeData);
+        reset();
+        onClose();
     }
 
     const inputStyle = "p-2 border border-zinc-200 rounded-md flex-grow w-full"
@@ -101,9 +104,9 @@ export default function RecipeFormModal({ isOpen, onClose }: RecipeFormModalProp
 
                     {/* URL da imagem */}
                     <div className="flex flex-col gap-1">
-                        <label htmlFor="imageUrl">URL da imageam</label>
-                        <input type="text" className={inputStyle} id="imageUrl" placeholder="/placeholder.svg" {...register("imageURL")} />
-                        {errors.imageURL && <span className="text-sm text-red-500">{errors.imageURL.message}</span>}
+                        <label htmlFor="image">URL da imageam</label>
+                        <input type="text" className={inputStyle} id="image" placeholder="/placeholder.svg" {...register("image")} />
+                        {errors.image && <span className="text-sm text-red-500">{errors.image.message}</span>}
                     </div>
 
                     <div className="grid grid-cols-3 gap-2">
